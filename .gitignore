@@ -1,0 +1,4 @@
+.idea
+pkg
+src/goamzn-isbn/vendor
+conf/token_cred.json
