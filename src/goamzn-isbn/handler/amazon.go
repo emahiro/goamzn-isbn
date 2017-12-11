@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -64,7 +65,7 @@ func SearchISBN(w http.ResponseWriter, r *http.Request) {
 	params.Set("Timestamp", time.Now().UTC().Format(time.RFC3339))
 	params.Set("AWSAccessKeyId", cred.AccessKeyId)
 	params.Set("AssociateTag", cred.AssociateTag)
-	params.Set("ResponseGroup", "Images,ItemAttributes,Offers")
+	params.Set("ResponseGroup", "ItemAttributes")
 
 	// 署名
 	canonical_params := params.Encode()
@@ -81,5 +82,18 @@ func SearchISBN(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Printf("%v\n", pp.Sprint(res.Status))
+	body := res.Body
+	br, err := ioutil.ReadAll(body)
+	if err != nil {
+		fmt.Printf("read error. err: %v", err)
+		return
+	}
+
+	var result model.ItemLookupResponse
+	if err := xml.Unmarshal(br, &result); err != nil {
+		fmt.Printf("xml unmarshal error. err: %v", err)
+	}
+
+	fmt.Printf("%v", pp.Sprint(&result))
 
 }
