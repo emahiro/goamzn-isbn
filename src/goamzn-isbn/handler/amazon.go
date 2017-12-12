@@ -85,6 +85,7 @@ func SearchISBN(w http.ResponseWriter, r *http.Request) {
 	body := res.Body
 	defer body.Close()
 	br, err := ioutil.ReadAll(body)
+
 	if err != nil {
 		fmt.Printf("read error. err: %v", err)
 		return
