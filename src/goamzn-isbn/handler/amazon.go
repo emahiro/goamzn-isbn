@@ -65,7 +65,7 @@ func SearchISBN(w http.ResponseWriter, r *http.Request) {
 	params.Set("Timestamp", time.Now().UTC().Format(time.RFC3339))
 	params.Set("AWSAccessKeyId", cred.AccessKeyId)
 	params.Set("AssociateTag", cred.AssociateTag)
-	params.Set("ResponseGroup", "ItemAttributes")
+	params.Set("ResponseGroup", "ItemAttributes, Images")
 
 	// 署名
 	canonical_params := params.Encode()
