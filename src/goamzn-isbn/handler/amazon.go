@@ -13,6 +13,7 @@ import (
 	"os"
 	"time"
 
+	"goamzn-isbn/errors"
 	"goamzn-isbn/model"
 
 	"github.com/k0kubun/pp"
@@ -65,7 +66,7 @@ func SearchISBN(w http.ResponseWriter, r *http.Request) {
 	params.Set("Timestamp", time.Now().UTC().Format(time.RFC3339))
 	params.Set("AWSAccessKeyId", cred.AccessKeyId)
 	params.Set("AssociateTag", cred.AssociateTag)
-	params.Set("ResponseGroup", "ItemAttributes, Images")
+	params.Set("ResponseGroup", "ItemAttributes,Images")
 
 	// 署名
 	canonical_params := params.Encode()
@@ -85,17 +86,27 @@ func SearchISBN(w http.ResponseWriter, r *http.Request) {
 	body := res.Body
 	defer body.Close()
 	br, err := ioutil.ReadAll(body)
-
 	if err != nil {
 		fmt.Printf("read error. err: %v", err)
 		return
 	}
 
+	fmt.Printf("%v", pp.Sprint(string(br)))
+
+	if res.Status != "200 OK" {
+		var errs errors.ItemLookupErrorResponse
+		if err := xml.Unmarshal(br, &errs); err != nil {
+			fmt.Printf("Error response unmarshal error. err: %v", err)
+		}
+		fmt.Printf("code: %v, meesage: %v", errs.Error.Code, errs.Error.Message)
+		return
+	}
+
 	var result model.ItemLookupResponse
 	if err := xml.Unmarshal(br, &result); err != nil {
-		fmt.Printf("xml unmarshal error. err: %v", err)
+		fmt.Printf("response unmarshal error. err: %v", err)
+		return
 	}
 
 	fmt.Printf("%v", pp.Sprint(&result))
-
 }
