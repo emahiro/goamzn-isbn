@@ -7,7 +7,11 @@ type Item struct {
 	ASIN           string         `xml:"ASIN"`
 	DetailPageURL  string         `xml:"DetailPageURL"`
 	ItemLinks      ItemLinks      `xml:"ItemLinks"`
+	SmallImage     SmallImage     `xml:"SmallImage"`
+	MediumImage    MediumImage    `xml:"MediumImage"`
+	LargeImage     LargeImage     `xml:"LargeImage"`
 	ItemAttributes ItemAttributes `xml:"ItemAttributes"`
+	ImageSets      ImageSets      `xml:"ImageSets"`
 }
 
 type ItemLinks struct {
