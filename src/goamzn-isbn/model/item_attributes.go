@@ -7,11 +7,11 @@ type ItemAttributes struct {
 	Author            []string          `xml:"Author"`
 	Binding           string            `xml:"Binding"`
 	EAN               int64             `xml:"EAN"`
-	EANList           EANList           `xml:"EANList"`
+	EANList           int64             `xml:"EANList>EANListElement"`
 	IsAdultProduct    bool              `xml:"IsAdultProduct"`
 	ISBN              string            `xml:"ISBN"`
 	Label             string            `xml:"Label"`
-	Languages         Languages         `xml:"Languages"`
+	Languages         []Language        `xml:"Languages>Language"`
 	Manufacturer      string            `xml:"Manufacturer"`
 	NumberOfPages     int64             `xml:"NumberOfPages"`
 	PackageDimensions PackageDimensions `xml:"PackageDimensions"`
@@ -21,16 +21,6 @@ type ItemAttributes struct {
 	Publisher         string            `xml:"Publisher"`
 	Studio            string            `xml:"Studio"`
 	Title             string            `xml:"Title"`
-}
-
-type EANList struct {
-	XMLName        xml.Name `xml:"EANList"`
-	EANListElement int64    `xml:"EANListElement"`
-}
-
-type Languages struct {
-	XMLName  xml.Name   `xml:"Languages"`
-	Language []Language `xml:"Language"`
 }
 
 type Language struct {
